@@ -1,6 +1,8 @@
-var engine = require('../engine');
-var stage = require('../stage');
-var prompt = require('../prompt');
+var engine = require('..');
+
+var world = engine.world;
+var stage = engine.stage;
+var prompt = engine.prompt;
 
 /*
     Welcome Level
@@ -13,7 +15,7 @@ introStage.addQuestion(nameQuestion, printAnswer);
 introStage.addQuestion(ageQuestion, printAnswer);
 
 introStage.executeBefore(function() {
-    engine.showBanner('<Academia de Código_>');
+    world.showBanner('<Academia de Código_>');
     console.log('Welcome to the workshop, young <Beta Code Cadet>\n');
 });
 
@@ -22,7 +24,7 @@ introStage.executeBefore(function() {
  */
 var endStage = stage.create('end');
 endStage.executeAfter(function() {
-    engine.showBanner('The End...');
+    world.showBanner('The End...');
 });
 
 /*
@@ -48,19 +50,19 @@ stage2.addQuestion(s2Question2, printAnswer);
     Quit Stage
  */
 var quitStage = stage.create('quit');
-quitStage.executeBefore(engine.quit);
-engine.addMenuStage(quitStage);
+quitStage.executeBefore(world.quit);
+world.addMenuStage(quitStage);
 
 /*
-    Register stages on engine
+    Register stages on world
  */
-engine.addBeforeStage(introStage);
-engine.addMenuStage(stage1);
-engine.addMenuStage(stage2);
-engine.addAfterStage(endStage);
+world.addBeforeStage(introStage);
+world.addMenuStage(stage1);
+world.addMenuStage(stage2);
+world.addAfterStage(endStage);
 
-engine.setMenu('Where do you want to go next?');
-engine.run();
+world.setMenu('Where do you want to go next?');
+world.run();
 
 function printAnswer(answer) {
     console.log('you replied ' + answer);
