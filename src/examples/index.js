@@ -8,6 +8,14 @@ var prompt = engine.prompt;
  */
 var nameQuestion = prompt.makeInputQuestion('What is your name? ');
 var ageQuestion = prompt.makeInputQuestion('What is your age? ');
+ageQuestion.setValidator(function(answer) {
+
+    var age = parseInt(answer);
+    if (isNaN(age) || age < 10 || age > 80) {
+        return 'Invalid age!!!';
+    }
+
+});
 
 var introStage = engine.createStage('welcome');
 introStage.addQuestion(nameQuestion, printAnswer);

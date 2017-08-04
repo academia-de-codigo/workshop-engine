@@ -19,7 +19,7 @@ function buildInput(message) {
         type: 'input',
         name: 'question',
         message: message,
-        addValidation: addValidation
+        setValidator: setValidator
     };
 }
 
@@ -31,8 +31,12 @@ function buildList(options) {
     };
 }
 
-//TODO: abstract weird inquirer validator logic
-function addValidation(validator) {
+function setValidator(validator) {
     /* jshint -W040 */
-    this.validate = validator;
+
+    this.validate = function(answer) {
+        var error = validator(answer);
+
+        return error ? error : true;
+    };
 }
