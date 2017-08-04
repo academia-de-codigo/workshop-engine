@@ -6,9 +6,9 @@ var execution = require('./execution');
 var LOADING = 'Loading game engine...\n';
 
 var engine = {
-    executeBefore: executeBefore,
-    executeAfter: executeAfter,
-    addStage: addStage,
+    addBefore: addBeforeStage,
+    addAfter: addAfterStage,
+    addMenu: addMenuStage,
     showBanner: showBanner,
     run: run,
     stages: []
@@ -16,40 +16,47 @@ var engine = {
 
 module.exports = engine;
 
-function executeBefore(procedure) {
-    engine.before = procedure;
+function addBeforeStage(stage) {
+    engine.before = stage;
 }
 
-function executeAfter(procedure) {
-    engine.after = procedure;
+function addAfterStage(stage) {
+    engine.after = stage;
 }
 
-function addStage(stage) {
+function addMenuStage(stage) {
     engine.stages.push(stage);
 }
 
 function run() {
 
     console.log(LOADING);
-    execution.add(engine.before);
 
-    engine.stages.forEach(function (stage) {
-        execution.add(stage.before);
-        stage.questions.forEach(function (question) {
-            execution.add(function () {
-                return inquirer.prompt(question.metadata).then(function (answers) {
+    runStage(engine.before).then(function() {
+        return runStage(engine.after);
+    });
+
+
+}
+
+function runStage(stage) {
+
+    execution.reset();
+
+    execution.add(stage.before);
+    stage.questions.forEach(function (question) {
+        execution.add(function () {
+            return inquirer.prompt(question.metadata)
+                .then(function (answers) {
                     if (question.cb) {
                         question.cb(answers.question);
                     }
                 });
-            });
         });
-        execution.add(stage.after);
     });
+    execution.add(stage.after);
 
-    execution.add(engine.after);
-    execution.start();
-
+    return execution.start();
 }
 
 function showBanner(text) {

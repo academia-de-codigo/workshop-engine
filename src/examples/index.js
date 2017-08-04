@@ -23,6 +23,6 @@ endStage.executeAfter(function() {
     engine.showBanner('The End...');
 });
 
-engine.addStage(introStage);
-engine.addStage(endStage);
+engine.addBefore(introStage);
+engine.addAfter(endStage);
 engine.run();

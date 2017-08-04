@@ -10,7 +10,7 @@ module.exports = stage;
 function build(name) {
 
     if (!name) {
-        error.severe('stage should have a name');
+        error.warning('stage should have a name');
     }
 
     return {
