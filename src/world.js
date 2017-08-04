@@ -2,11 +2,13 @@ var Promise = require('bluebird');
 var inquirer = require('inquirer');
 var figlet = require('figlet');
 var chalk = require('chalk');
+var stage = require('./stage');
 var execution = require('./execution');
 
 var LOADING = 'Loading game engine...\n';
 
 var engine = {
+    stageFactory: stage,
     quit: quit,
     setMenu: setMenu,
     addBeforeStage: addBeforeStage,

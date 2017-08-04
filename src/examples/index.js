@@ -1,7 +1,6 @@
 var engine = require('..');
 
 var world = engine.world;
-var stage = engine.stage;
 var prompt = engine.prompt;
 
 /*
@@ -10,7 +9,7 @@ var prompt = engine.prompt;
 var nameQuestion = prompt.makeInputQuestion('What is your name? ');
 var ageQuestion = prompt.makeInputQuestion('What is your age? ');
 
-var introStage = stage.create('welcome');
+var introStage = engine.createStage('welcome');
 introStage.addQuestion(nameQuestion, printAnswer);
 introStage.addQuestion(ageQuestion, printAnswer);
 
@@ -22,7 +21,7 @@ introStage.executeBefore(function() {
 /*
     End Level
  */
-var endStage = stage.create('end');
+var endStage = engine.createStage('end');
 endStage.executeAfter(function() {
     world.showBanner('The End...');
 });
@@ -32,7 +31,7 @@ endStage.executeAfter(function() {
  */
 var s1Question1 = prompt.makeInputQuestion('stage 1 question 1:');
 var s1Question2 = prompt.makeInputQuestion('stage 1 question 2:');
-var stage1 = stage.create('stage1');
+var stage1 = engine.createStage('stage1');
 stage1.addQuestion(s1Question1, printAnswer);
 stage1.addQuestion(s1Question2, printAnswer);
 
@@ -42,14 +41,14 @@ stage1.addQuestion(s1Question2, printAnswer);
  */
 var s2Question1 = prompt.makeInputQuestion('stage 2 question 1:');
 var s2Question2 = prompt.makeInputQuestion('stage 2 question 2:');
-var stage2 = stage.create('stage2');
+var stage2 = engine.createStage('stage2');
 stage2.addQuestion(s2Question1, printAnswer);
 stage2.addQuestion(s2Question2, printAnswer);
 
 /*
     Quit Stage
  */
-var quitStage = stage.create('quit');
+var quitStage = engine.createStage('quit');
 quitStage.executeBefore(world.quit);
 world.addMenuStage(quitStage);
 
