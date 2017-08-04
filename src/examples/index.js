@@ -66,4 +66,5 @@ world.run();
 
 function printAnswer(answer) {
     console.log('you replied ' + answer);
+    return false;
 }

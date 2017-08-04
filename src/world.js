@@ -56,12 +56,19 @@ function runStage(stage) {
     execution.reset();
 
     execution.add(stage.before);
+
+    var moreQuestions = true;
     stage.questions.forEach(function (question) {
         execution.add(function () {
+
+            if (!moreQuestions) {
+                return Promise.resolve();
+            }
+
             return inquirer.prompt(question.metadata)
                 .then(function (answers) {
                     if (question.cb) {
-                        question.cb(answers.question);
+                        moreQuestions = question.cb(answers.question);
                     }
                 });
         });
