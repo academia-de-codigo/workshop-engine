@@ -22,7 +22,7 @@ introStage.addQuestion(nameQuestion, printAnswer);
 introStage.addQuestion(ageQuestion, printAnswer);
 
 introStage.executeBefore(function() {
-    world.showBanner('<Academia de Código_>');
+    engine.showBanner('<Academia de Código_>');
     console.log('Welcome to the workshop, young <Beta Code Cadet>\n');
 });
 
@@ -31,7 +31,7 @@ introStage.executeBefore(function() {
  */
 var endStage = engine.createStage('end');
 endStage.executeAfter(function() {
-    world.showBanner('The End...');
+    engine.showBanner('The End...');
 });
 
 /*

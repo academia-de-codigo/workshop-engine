@@ -1,6 +1,5 @@
 var Promise = require('bluebird');
 var inquirer = require('inquirer');
-var figlet = require('figlet');
 var chalk = require('chalk');
 var stage = require('./stage');
 var execution = require('./execution');
@@ -14,7 +13,6 @@ var engine = {
     addBeforeStage: addBeforeStage,
     addAfterStage: addAfterStage,
     addMenuStage: addMenuStage,
-    showBanner: showBanner,
     run: run,
     stages: []
 };
@@ -122,10 +120,6 @@ function runMenu() {
             return runMenu();
 
         });
-}
-
-function showBanner(text) {
-    console.log(chalk.cyan(figlet.textSync(text)));
 }
 
 function quit() {
