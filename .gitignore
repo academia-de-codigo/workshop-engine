@@ -1,0 +1,6 @@
+# ignore node stuff
+node_modules
+npm-debug.log
+
+# osx
+.DS_STORE

@@ -1,0 +1,29 @@
+{
+    "strict": "implied",
+    "bitwise": true,
+    "laxcomma": true,
+    "camelcase": true,
+    "curly": true,
+    "eqeqeq": true,
+    "forin": false,
+    "immed": true,
+    "latedef": false,
+    "newcap": true,
+    "noarg": true,
+    "nonew": false,
+    "quotmark": "single",
+    "undef": false,
+    "unused": true,
+    "devel": true,
+    "trailing": true,
+    "browser": true,
+    "node": true,
+    "sub": true,
+    "debug": true,
+    "globals": {
+        "require": true,
+        "module": true,
+        "exports": true,
+        "$": true
+    }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "workshop-engine",
+  "version": "0.0.1",
+  "description": "Simple Game Engine to be used at A/C Workshop days",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "chalk": "^2.0.1",
+    "figlet": "^1.2.0",
+    "inquirer": "^3.2.1"
+  }
+}
