@@ -1,3 +1,4 @@
+var Promise = require('bluebird');
 var inquirer = require('inquirer');
 var figlet = require('figlet');
 var chalk = require('chalk');
@@ -6,15 +7,21 @@ var execution = require('./execution');
 var LOADING = 'Loading game engine...\n';
 
 var engine = {
-    addBefore: addBeforeStage,
-    addAfter: addAfterStage,
-    addMenu: addMenuStage,
+    quit: quit,
+    setMenu: setMenu,
+    addBeforeStage: addBeforeStage,
+    addAfterStage: addAfterStage,
+    addMenuStage: addMenuStage,
     showBanner: showBanner,
     run: run,
     stages: []
 };
 
 module.exports = engine;
+
+function setMenu(text) {
+    engine.text = text;
+}
 
 function addBeforeStage(stage) {
     engine.before = stage;
@@ -30,12 +37,17 @@ function addMenuStage(stage) {
 
 function run() {
 
-    console.log(LOADING);
+    console.log(chalk.grey(LOADING));
 
     runStage(engine.before).then(function() {
+
+        console.log('\n');
+        return runMenu();
+
+    }).then(function() {
+        console.log('\n');
         return runStage(engine.after);
     });
-
 
 }
 
@@ -59,6 +71,41 @@ function runStage(stage) {
     return execution.start();
 }
 
+function runMenu() {
+
+    var options = engine.stages.map(function(stage) {
+        return stage.name;
+    });
+
+    return inquirer.prompt({
+        type: 'list',
+        name: 'menu',
+        message: engine.text || 'Choose an option:',
+        choices: options
+    }).then(function(answers) {
+
+        var stage = engine.stages.filter(function(stage) {
+              return stage.name === answers.menu;
+        })[0];
+
+        return runStage(stage);
+
+    }).then(function() {
+
+        if (engine.stop) {
+            return Promise.resolve();
+        }
+
+        return runMenu();
+
+    });
+
+}
+
 function showBanner(text) {
     console.log(chalk.cyan(figlet.textSync(text)));
+}
+
+function quit() {
+    engine.stop = true;
 }
