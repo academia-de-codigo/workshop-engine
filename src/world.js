@@ -56,15 +56,10 @@ function runStage(stage) {
 
     execution.reset();
 
-    if (stage.before) {
+    if (stage) {
+
         execution.add(stage.before);
-    }
-
-    if (stage.questions) {
         runQuestions(stage.questions);
-    }
-
-    if (stage.after) {
         execution.add(stage.after);
     }
 
@@ -72,6 +67,11 @@ function runStage(stage) {
 }
 
 function runQuestions(questions) {
+
+    if (!questions) {
+        return;
+    }
+
     var moreQuestions = true;
     questions.forEach(function (question) {
         execution.add(function () {
