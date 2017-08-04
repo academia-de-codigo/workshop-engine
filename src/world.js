@@ -39,26 +39,41 @@ function run() {
 
     console.log(chalk.grey(LOADING));
 
-    runStage(engine.before).then(function() {
+    runStage(engine.before)
+        .then(function () {
 
-        console.log('\n');
-        return runMenu();
+            console.log('\n');
+            return runMenu();
 
-    }).then(function() {
-        console.log('\n');
-        return runStage(engine.after);
-    });
-
+        })
+        .then(function () {
+            console.log('\n');
+            return runStage(engine.after);
+        });
 }
 
 function runStage(stage) {
 
     execution.reset();
 
-    execution.add(stage.before);
+    if (stage.before) {
+        execution.add(stage.before);
+    }
 
+    if (stage.questions) {
+        runQuestions(stage.questions);
+    }
+
+    if (stage.after) {
+        execution.add(stage.after);
+    }
+
+    return execution.start();
+}
+
+function runQuestions(questions) {
     var moreQuestions = true;
-    stage.questions.forEach(function (question) {
+    questions.forEach(function (question) {
         execution.add(function () {
 
             if (!moreQuestions) {
@@ -73,40 +88,38 @@ function runStage(stage) {
                 });
         });
     });
-    execution.add(stage.after);
-
-    return execution.start();
 }
 
 function runMenu() {
 
-    var options = engine.stages.map(function(stage) {
+    var options = engine.stages.map(function (stage) {
         return stage.name;
     });
 
     return inquirer.prompt({
-        type: 'list',
-        name: 'menu',
-        message: engine.text || 'Choose an option:',
-        choices: options
-    }).then(function(answers) {
+            type: 'list',
+            name: 'menu',
+            message: engine.text || 'Choose an option:',
+            choices: options
+        })
+        .then(function (answers) {
 
-        var stage = engine.stages.filter(function(stage) {
-              return stage.name === answers.menu;
-        })[0];
+            var stage = engine.stages.filter(function (stage) {
+                return stage.name === answers.menu;
+            })[0];
 
-        return runStage(stage);
+            return runStage(stage);
 
-    }).then(function() {
+        })
+        .then(function () {
 
-        if (engine.stop) {
-            return Promise.resolve();
-        }
+            if (engine.stop) {
+                return Promise.resolve();
+            }
 
-        return runMenu();
+            return runMenu();
 
-    });
-
+        });
 }
 
 function showBanner(text) {
