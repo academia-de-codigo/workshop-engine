@@ -1,13 +1,12 @@
 var engine = require('..');
 
-var world = engine.world;
-var prompt = engine.prompt;
+var world = engine.createWorld();
 
 /*
     Welcome Level
  */
-var nameQuestion = prompt.makeInputQuestion('What is your name? ');
-var ageQuestion = prompt.makeInputQuestion('What is your age? ');
+var nameQuestion = engine.makeInputQuestion('What is your name? ');
+var ageQuestion = engine.makeInputQuestion('What is your age? ');
 ageQuestion.setValidator(function(answer) {
 
     var age = parseInt(answer);
@@ -37,8 +36,8 @@ endStage.executeAfter(function() {
 /*
     Stage 1
  */
-var s1Question1 = prompt.makeInputQuestion('stage 1 question 1:');
-var s1Question2 = prompt.makeInputQuestion('stage 1 question 2:');
+var s1Question1 = engine.makeInputQuestion('stage 1 question 1:');
+var s1Question2 = engine.makeInputQuestion('stage 1 question 2:');
 var stage1 = engine.createStage('stage1');
 stage1.addQuestion(s1Question1, printAnswer);
 stage1.addQuestion(s1Question2, printAnswer);
@@ -47,8 +46,8 @@ stage1.addQuestion(s1Question2, printAnswer);
 /*
     Stage 2
  */
-var s2Question1 = prompt.makeInputQuestion('stage 2 question 1:');
-var s2Question2 = prompt.makeInputQuestion('stage 2 question 2:');
+var s2Question1 = engine.makeInputQuestion('stage 2 question 1:');
+var s2Question2 = engine.makeInputQuestion('stage 2 question 2:');
 var stage2 = engine.createStage('stage2');
 stage2.addQuestion(s2Question1, printAnswer);
 stage2.addQuestion(s2Question2, printAnswer);

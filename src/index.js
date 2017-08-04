@@ -3,8 +3,12 @@ var prompt = require('./prompt');
 var banner = require('./banner');
 
 module.exports = {
-    world: world,
-    prompt: prompt,
+    showBanner: banner.show,
+    makeInputQuestion: prompt.makeInputQuestion,
+    makeConfirmQuestion: prompt.makeInputQuestion,
+    makeListQuestion: prompt.makeListQuestion,
     createStage: world.stageFactory.create,
-    showBanner: banner.show
+    createWorld: function() {
+        return world;
+    }
 };
