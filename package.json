@@ -1,24 +1,24 @@
 {
-    "name": "workshop-engine",
-    "version": "0.0.1",
-    "description": "Simple Game Engine to be used at A/C Workshop days",
-    "main": "src/index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git@github.com:academia-de-codigo/workshop-engine.git"
-    },
-    "author": "<Academia de Código_>",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/academia-de-codigo/noire-server/issues"
-    },
-    "dependencies": {
-        "bluebird": "^3.5.0",
-        "chalk": "^2.0.1",
-        "figlet": "^1.2.0",
-        "inquirer": "^3.2.1"
-    }
+  "name": "workshop-engine",
+  "version": "0.0.2",
+  "description": "Simple Game Engine to be used at A/C Workshop days",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:academia-de-codigo/workshop-engine.git"
+  },
+  "author": "<Academia de Código_>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/academia-de-codigo/noire-server/issues"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "chalk": "^2.0.1",
+    "figlet": "^1.2.0",
+    "inquirer": "^3.2.1"
+  }
 }
