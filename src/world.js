@@ -74,7 +74,7 @@ function runQuestions(questions) {
     questions.forEach(function (question) {
         execution.add(function () {
 
-            if (!moreQuestions) {
+            if (!moreQuestions || engine.stop) {
                 return Promise.resolve();
             }
 
@@ -98,6 +98,10 @@ function runMenu() {
         return Promise.resolve();
     }
 
+    if (engine.stop) {
+        return Promise.resolve();
+    }
+
     return inquirer.prompt({
             type: 'list',
             name: 'menu',
@@ -114,10 +118,6 @@ function runMenu() {
 
         })
         .then(function () {
-
-            if (engine.stop) {
-                return Promise.resolve();
-            }
 
             return runMenu();
 
