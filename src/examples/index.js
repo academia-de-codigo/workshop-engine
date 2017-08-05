@@ -67,7 +67,7 @@ world.addMenuStage(stage1);
 world.addMenuStage(stage2);
 world.addAfterStage(endStage);
 
-world.setMenu('Where do you want to go next?');
+world.setMenuPrompt('Where do you want to go next?');
 world.run();
 
 function printAnswer(answer) {

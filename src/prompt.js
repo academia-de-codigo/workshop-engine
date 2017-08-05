@@ -23,10 +23,11 @@ function buildInput(message) {
     };
 }
 
-function buildList(options) {
+function buildList(message, options) {
     return {
         type: 'list',
         name: 'question',
+        message: message,
         choices: options
     };
 }

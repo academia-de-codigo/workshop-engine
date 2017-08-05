@@ -9,7 +9,7 @@ var LOADING = 'Loading game engine...\n';
 var engine = {
     stageFactory: stage,
     quit: quit,
-    setMenu: setMenu,
+    setMenuPrompt: setMenuPrompt,
     addBeforeStage: addBeforeStage,
     addAfterStage: addAfterStage,
     addMenuStage: addMenuStage,
@@ -19,7 +19,7 @@ var engine = {
 
 module.exports = engine;
 
-function setMenu(text) {
+function setMenuPrompt(text) {
     engine.text = text;
 }
 
@@ -42,12 +42,10 @@ function run() {
     runStage(engine.before)
         .then(function () {
 
-            console.log('\n');
             return runMenu();
 
         })
         .then(function () {
-            console.log('\n');
             return runStage(engine.after);
         });
 }
@@ -95,6 +93,10 @@ function runMenu() {
     var options = engine.stages.map(function (stage) {
         return stage.name;
     });
+
+    if (options.length === 0) {
+        return Promise.resolve();
+    }
 
     return inquirer.prompt({
             type: 'list',
