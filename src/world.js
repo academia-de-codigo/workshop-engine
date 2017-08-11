@@ -52,13 +52,21 @@ function run() {
 
 function runStage(stage) {
 
+    var menu = true;
+
     execution.reset();
 
     if (stage) {
 
-        execution.add(stage.before);
-        runQuestions(stage.questions);
-        execution.add(stage.after);
+        if (stage.before) {
+            menu = stage.before();
+        }
+
+        if (menu) {
+            runQuestions(stage.questions);
+            execution.add(stage.after);
+        }
+
     }
 
     return execution.start();
