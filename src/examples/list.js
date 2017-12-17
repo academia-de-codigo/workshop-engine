@@ -1,12 +1,17 @@
 var engine = require('..');
 
-var listQuestion = engine.makeListQuestion('Red or Blue pill?', ['RED', 'BLUE']);
-
-var stage = engine.createStage('test');
-stage.addQuestion(listQuestion, function (answer) {
-    console.log('The color of your pill is', answer);
+var stage = engine.create({
+    name: 'test',
+    type: 'stage'
 });
 
-var world = engine.createWorld();
-world.addBeforeStage(stage);
-world.run();
+stage.addQuestion({
+    message: 'Blue or Red pill?',
+    type: 'list',
+    options: ['BLUE', 'RED'],
+    action: function(answer) {
+        console.log('You\'ve chose the ' + answer + ' pill');
+    }
+});
+
+engine.run();

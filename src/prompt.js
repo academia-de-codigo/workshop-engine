@@ -1,43 +1,54 @@
 var prompt = {
-    makeConfirmQuestion: buildConfirm,
-    makeListQuestion: buildList,
-    makeInputQuestion: buildInput
+    confirm: buildConfirm,
+    list: buildList,
+    input: buildInput,
+    types: {
+        CONFIRM: 'confirm',
+        LIST: 'list',
+        INPUT: 'input'
+    }
 };
 
-module.exports = prompt;
+function QuestionBuilder(options) {
 
-function buildConfirm(message) {
+    if (!prompt[options.type]) {
+        throw new Error('Invalid question type. Expecting \'list\', \'confirm\' or \'input\'');
+    }
+
+    return prompt[options.type](options);
+}
+
+module.exports = QuestionBuilder;
+
+function buildConfirm(options) {
     return {
-        type: 'confirm',
+        type: prompt.types.CONFIRM,
         name: 'question',
-        message: message
+        message: options.message
     };
 }
 
-function buildInput(message) {
+function buildInput(options) {
     return {
-        type: 'input',
+        type: prompt.types.INPUT,
         name: 'question',
-        message: message,
-        setValidator: setValidator
+        message: options.message,
+        validate: addValidator(options.validator)
     };
 }
 
-function buildList(message, options) {
+function buildList(options) {
     return {
-        type: 'list',
+        type: prompt.types.LIST,
         name: 'question',
-        message: message,
-        choices: options
+        message: options.message,
+        choices: options.options
     };
 }
 
-function setValidator(validator) {
-    /* jshint -W040 */
-
-    this.validate = function(answer) {
+function addValidator(validator) {
+    return function(answer) {
         var error = validator(answer);
-
         return error ? error : true;
     };
 }

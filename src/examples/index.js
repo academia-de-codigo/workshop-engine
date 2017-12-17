@@ -1,34 +1,41 @@
 var engine = require('..');
-
-var world = engine.createWorld();
+var name;
 
 /*
     Welcome Level
  */
-var nameQuestion = engine.makeInputQuestion('What is your name? ');
-var ageQuestion = engine.makeInputQuestion('What is your age? ');
-ageQuestion.setValidator(function(answer) {
-
-    var age = parseInt(answer);
-    if (isNaN(age) || age < 10 || age > 80) {
-        return 'Invalid age!!!';
-    }
-
+var introStage = engine.create({
+    name: 'welcome',
+    type: 'before'
 });
-
-var introStage = engine.createStage('welcome');
-introStage.addQuestion(nameQuestion, printAnswer);
-introStage.addQuestion(ageQuestion, printAnswer);
 
 introStage.executeBefore(function() {
     engine.showBanner('<Academia de Código_>');
     console.log('Welcome to the workshop, young <Beta Code Cadet>\n');
 });
 
+var nameQuestion = introStage.addQuestion({
+    type: 'input',
+    message: 'What\'s your name?',
+    validator: function(answer) {
+        if (answer.length === 0) {
+            return 'Don\'t be shy, tell me your name';
+        }
+    },
+    action: function(answer) {
+        name = answer;
+        console.log('Welcome ' + name);
+    }
+});
+
 /*
     End Level
  */
-var endStage = engine.createStage('end');
+var endStage = engine.create({
+    name: 'end',
+    type: 'after'
+});
+
 endStage.executeAfter(function() {
     engine.showBanner('The End...');
 });
@@ -36,41 +43,61 @@ endStage.executeAfter(function() {
 /*
     Stage 1
  */
-var s1Question1 = engine.makeInputQuestion('stage 1 question 1:');
-var s1Question2 = engine.makeInputQuestion('stage 1 question 2:');
-var stage1 = engine.createStage('stage1');
-stage1.addQuestion(s1Question1, printAnswer);
-stage1.addQuestion(s1Question2, printAnswer);
+var stage1 = engine.create({
+    name: 'stage 1',
+    type: 'stage'
+});
 
+var s1Question1 = stage1.addQuestion({
+    message: 'stage 1 question 1:',
+    type: 'confirm',
+    action: function(answer) {
+        console.log('the answer to stage 1 question 1 is: ', answer);
+    }
+});
+
+var s1Question2 = stage1.addQuestion({
+    message: 'stage 1 question 2',
+    type: 'list',
+    options: ['batata', 'chourico'],
+    action: function(answer) {
+        console.log('the answer to stage 1 question 2 is: ', answer);
+    }
+});
 
 /*
     Stage 2
  */
-var s2Question1 = engine.makeInputQuestion('stage 2 question 1:');
-var s2Question2 = engine.makeInputQuestion('stage 2 question 2:');
-var stage2 = engine.createStage('stage2');
-stage2.addQuestion(s2Question1, printAnswer);
-stage2.addQuestion(s2Question2, printAnswer);
+var stage2 = engine.create({
+    name: 'stage 2',
+    type: 'stage'
+});
+
+var s2Question1 = stage2.addQuestion({
+    type: 'confirm',
+    message: 'stage 2 question 1',
+    action: function(answer) {
+        console.log('answer to stage 2 question 1 is: ', answer);
+    }
+});
+
+var s2Question1 = stage2.addQuestion({
+    type: 'confirm',
+    message: 'stage 2 question 2',
+    action: function(answer) {
+        console.log('answer to stage 2 question 2 is: ', answer);
+    }
+});
 
 /*
     Quit Stage
  */
-var quitStage = engine.createStage('quit');
-quitStage.executeBefore(world.quit);
-world.addMenuStage(quitStage);
+var quitStage = engine.create({
+    name: 'quit',
+    type: 'stage'
+});
 
-/*
-    Register stages on world
- */
-world.addBeforeStage(introStage);
-world.addMenuStage(stage1);
-world.addMenuStage(stage2);
-world.addAfterStage(endStage);
+quitStage.executeBefore(engine.quit);
 
-world.setMenuPrompt('Where do you want to go next?');
-world.run();
-
-function printAnswer(answer) {
-    console.log('you replied ' + answer);
-    return true;
-}
+engine.setMenuPrompt('Where do you want to go next?');
+engine.run();

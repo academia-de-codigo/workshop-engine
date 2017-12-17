@@ -4,11 +4,8 @@ var banner = require('./banner');
 
 module.exports = {
     showBanner: banner.show,
-    makeInputQuestion: prompt.makeInputQuestion,
-    makeConfirmQuestion: prompt.makeConfirmQuestion,
-    makeListQuestion: prompt.makeListQuestion,
-    createStage: world.stageFactory.create,
-    createWorld: function() {
-        return world;
-    }
+    create: world.create,
+    setMenuPrompt: world.setMenuPrompt,
+    run: world.run,
+    quit: world.quit
 };

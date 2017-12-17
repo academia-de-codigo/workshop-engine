@@ -7,129 +7,106 @@ var execution = require('./execution');
 var LOADING = 'Loading game engine...\n';
 
 var engine = {
-    stageFactory: stage,
+    create: create,
     quit: quit,
     setMenuPrompt: setMenuPrompt,
-    addBeforeStage: addBeforeStage,
-    addAfterStage: addAfterStage,
-    addMenuStage: addMenuStage,
     run: run,
-    stages: []
+    stage: [],
+    before: [],
+    after: []
 };
 
 module.exports = engine;
+
+function create(options) {
+    if (!engine[options.type]) {
+        throw new Error(
+            'Invalid Stage type, expecting: \'stage\', \'before\' or \'after\''
+        );
+    }
+
+    var built = stage.build(options.name);
+    engine[options.type].push(built);
+
+    return built;
+}
 
 function setMenuPrompt(text) {
     engine.text = text;
 }
 
-function addBeforeStage(stage) {
-    engine.before = stage;
-}
-
-function addAfterStage(stage) {
-    engine.after = stage;
-}
-
-function addMenuStage(stage) {
-    engine.stages.push(stage);
-}
-
 function run() {
-
     console.log(chalk.grey(LOADING));
 
-    runStage(engine.before)
-        .then(function () {
-
-            return runMenu();
-
-        })
-        .then(function () {
-            return runStage(engine.after);
+    Promise.each(engine.before, runStage)
+        .then(runMenu)
+        .then(function() {
+            return Promise.each(engine.after, runStage);
         });
 }
 
 function runStage(stage) {
-
-    var menu = true;
+    if (!stage) {
+        throw new Error('Stage cannot be false');
+    }
 
     execution.reset();
 
-    if (stage) {
-
-        if (stage.before) {
-            menu = stage.before();
-        }
-
-        if (menu) {
-            runQuestions(stage.questions);
-            execution.add(stage.after);
-        }
-
+    if (stage.before) {
+        stage.before();
     }
+
+    runQuestions(stage.questions);
+    execution.add(stage.after);
 
     return execution.start();
 }
 
 function runQuestions(questions) {
-
     if (!questions) {
         return;
     }
 
-    var moreQuestions = true;
-    questions.forEach(function (question) {
-        execution.add(function () {
-
-            if (!moreQuestions || engine.stop) {
+    var breakChain = false;
+    questions.forEach(function(question) {
+        execution.add(function() {
+            if (breakChain || engine.stop) {
                 return Promise.resolve();
             }
 
-            return inquirer.prompt(question.metadata)
-                .then(function (answers) {
-                    if (question.cb) {
-                        moreQuestions = question.cb(answers.question);
-                    }
-                });
+            return inquirer.prompt(question.metadata).then(function(answers) {
+                if (question.cb) {
+                    breakChain = question.cb(answers.question);
+                }
+            });
         });
     });
 }
 
 function runMenu() {
-
-    var options = engine.stages.map(function (stage) {
+    var options = engine.stage.map(function(stage) {
         return stage.name;
     });
 
-    if (options.length === 0) {
+    if (options.length === 0 || engine.stop) {
         return Promise.resolve();
     }
 
-    if (engine.stop) {
-        return Promise.resolve();
-    }
-
-    return inquirer.prompt({
+    return inquirer
+        .prompt({
             type: 'list',
             name: 'menu',
             message: engine.text || 'Choose an option:',
             choices: options
         })
-        .then(function (answers) {
-
-            var stage = engine.stages.filter(function (stage) {
+        .then(function(answers) {
+            var stage = engine.stage.find(function(stage) {
                 return stage.name === answers.menu;
-            })[0];
+            });
 
             return runStage(stage);
-
         })
-        .then(function () {
-
-            return runMenu();
-
-        });
+        .then(runMenu);
 }
 
 function quit() {

@@ -2,7 +2,7 @@ var figlet = require('figlet');
 var chalk = require('chalk');
 
 var banner = {
-     show: show
+    show: show
 };
 
 module.exports = banner;

@@ -25,7 +25,6 @@ function add(procedure) {
 }
 
 function start() {
-
     return execution.procedures.reduce(function(acc, cur) {
         return acc.then(cur);
     }, Promise.resolve());
