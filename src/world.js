@@ -40,7 +40,7 @@ function run() {
 
     Promise.each(engine.before, runStage)
         .then(runMenu)
-        .then(function() {
+        .then(function () {
             return Promise.each(engine.after, runStage);
         });
 }
@@ -52,8 +52,8 @@ function runStage(stage) {
 
     execution.reset();
 
-    if (stage.before) {
-        stage.before();
+    if (stage.before && stage.before()) {
+        return execution.start();
     }
 
     runQuestions(stage.questions);
@@ -68,13 +68,13 @@ function runQuestions(questions) {
     }
 
     var breakChain = false;
-    questions.forEach(function(question) {
-        execution.add(function() {
+    questions.forEach(function (question) {
+        execution.add(function () {
             if (breakChain || engine.stop) {
                 return Promise.resolve();
             }
 
-            return inquirer.prompt(question.metadata).then(function(answers) {
+            return inquirer.prompt(question.metadata).then(function (answers) {
                 if (question.cb) {
                     breakChain = question.cb(answers.question);
                 }
@@ -84,7 +84,7 @@ function runQuestions(questions) {
 }
 
 function runMenu() {
-    var options = engine.stage.map(function(stage) {
+    var options = engine.stage.map(function (stage) {
         return stage.name;
     });
 
@@ -99,8 +99,8 @@ function runMenu() {
             message: engine.text || 'Choose an option:',
             choices: options
         })
-        .then(function(answers) {
-            var stage = engine.stage.find(function(stage) {
+        .then(function (answers) {
+            var stage = engine.stage.find(function (stage) {
                 return stage.name === answers.menu;
             });
 
