@@ -52,11 +52,14 @@ function runStage(stage) {
 
     execution.reset();
 
-    if (stage.before && stage.before()) {
-        return execution.start();
+    var questions = true;
+    if (stage.before) {
+        questions = stage.before();
     }
 
-    runQuestions(stage.questions);
+    if (questions) {
+        runQuestions(stage.questions);
+    }
     execution.add(stage.after);
 
     return execution.start();
@@ -67,16 +70,20 @@ function runQuestions(questions) {
         return;
     }
 
-    var breakChain = false;
+    var moreQuestions = true;
     questions.forEach(function (question) {
         execution.add(function () {
-            if (breakChain || engine.stop) {
+            if (!moreQuestions || engine.stop) {
                 return Promise.resolve();
             }
 
             return inquirer.prompt(question.metadata).then(function (answers) {
+                var questionRetVal;
                 if (question.cb) {
-                    breakChain = question.cb(answers.question);
+                    questionRetVal = question.cb(answers.question);
+                    if (questionRetVal === false) {
+                        moreQuestions = false;
+                    }
                 }
             });
         });
