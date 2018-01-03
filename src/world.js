@@ -53,8 +53,12 @@ function runStage(stage) {
     execution.reset();
 
     var questions = true;
+    var beforeRetValue;
     if (stage.before) {
-        questions = stage.before();
+        beforeRetValue = stage.before();
+        if (beforeRetValue === false) {
+            questions = false;
+        }
     }
 
     if (questions) {
