@@ -3,6 +3,7 @@ var inquirer = require('inquirer');
 var chalk = require('chalk');
 var stage = require('./stage');
 var execution = require('./execution');
+var error = require('./error');
 
 var LOADING = 'Loading game engine...\n';
 
@@ -19,10 +20,9 @@ var engine = {
 module.exports = engine;
 
 function create(options) {
+
     if (!engine[options.type]) {
-        throw new Error(
-            'Invalid Stage type, expecting: \'stage\', \'before\' or \'after\''
-        );
+        error.severe('Invalid Stage type, expecting: \'stage\', \'before\' or \'after\'');
     }
 
     var built = stage.build(options.name);
@@ -46,8 +46,8 @@ function run() {
 }
 
 function runStage(stage) {
-    if (!stage) {
-        throw new Error('Stage cannot be false');
+    if (typeof stage !== 'object') {
+        throw new Error('invalid stage');
     }
 
     execution.reset();

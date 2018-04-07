@@ -1,3 +1,5 @@
+var error = require('./error');
+
 var prompt = {
     confirm: buildConfirm,
     list: buildList,
@@ -12,7 +14,11 @@ var prompt = {
 function QuestionBuilder(options) {
 
     if (!prompt[options.type]) {
-        throw new Error('Invalid question type. Expecting \'list\', \'confirm\' or \'input\'');
+        error.severe('Invalid question type. Expecting \'list\', \'confirm\' or \'input\' but got ' + options.type);
+    }
+
+    if (!options.message) {
+        error.severe('Invalid input question, expecting \'message\' parameter');
     }
 
     return prompt[options.type](options);
@@ -47,6 +53,11 @@ function buildList(options) {
 }
 
 function addValidator(validator) {
+
+    if (!validator) {
+        return;
+    }
+
     return function(answer) {
         var error = validator(answer);
         return error ? error : true;
