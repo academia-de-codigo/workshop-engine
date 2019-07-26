@@ -16,9 +16,9 @@
     "url": "https://github.com/academia-de-codigo/noire-server/issues"
   },
   "dependencies": {
-    "bluebird": "^3.5.0",
-    "chalk": "^2.0.1",
-    "figlet": "^1.2.0",
-    "inquirer": "^3.2.1"
+    "bluebird": "^3.5.5",
+    "chalk": "^2.4.2",
+    "figlet": "^1.2.3",
+    "inquirer": "^3.3.0"
   }
 }
